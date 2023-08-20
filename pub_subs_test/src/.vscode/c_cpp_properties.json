@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/daghbeji/ros_tutorials/src/cv_test/include/**",
+        "/home/daghbeji/ros_tutorials/src/hwp_simulation/hwp_turtlebot3_fake/include/**",
+        "/home/daghbeji/ros_tutorials/src/hwp_simulation/hwp_turtlebot3_gazebo/include/**",
+        "/home/daghbeji/ros_tutorials/src/pose_hypotheses/include/**",
+        "/home/daghbeji/catkin_ws/src/pub_subs_test/include/**",
+        "/home/daghbeji/ros_tutorials/src/global-planner/include/**",
+        "/home/daghbeji/ros_tutorials/src/move_base_plugin/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
