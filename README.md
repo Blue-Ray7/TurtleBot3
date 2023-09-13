@@ -11,8 +11,8 @@ For instance: * Simple publisher and subscriber
 	      * Tf2_listener
 	      * Laserscan_listener
 	      * Odometry_listener
-	      *	Camera_listener
-	      * Teleoperation: Used to control the robot using keyboard or joystick input
+	      *	Computer_vision: Processes images using OpenCV library 
+	      * Teleoperation: Controls the robot using keyboard or joystick input
 
 
 The master branch will include advanced project tasks using a mixture of the algorithms developed in the basic_functionalities branch.
