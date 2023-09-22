@@ -1,0 +1,16 @@
+<!--
+    pkg : Package name in package.xml
+    type: Executable in CMakeLists.txt
+    name: Node name in source file
+
+-->
+
+
+<launch>
+  <include file="$(find hwp_turtlebot3_gazebo)/launch/hwp_rescue_simple.launch" />
+
+  <node pkg="computer_vision" type="computer_vision_node" name="computer_vision" output="screen" />
+
+  <include file="$(find hwp_navigation)/launch/move_base.launch" />
+
+</launch>
