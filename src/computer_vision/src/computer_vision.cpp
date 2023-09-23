@@ -20,8 +20,13 @@ void CVTest(sensor_msgs::Image msg)
         ROS_ERROR("cv_bridge exception: %s", e.what());
     }
 
+    // Add blur effect to image
+    cv::Mat blurred_image;
+    cv::GaussianBlur(cv_img_ptr->image, blurred_image, cv::Size(57,57), 0);
+
     // Convert back to ROS message which can be published
-    imagePublisher.publish(cv_img_ptr->toImageMsg());   
+    imagePublisher.publish(cv_bridge::CvImage(cv_img_ptr->header, sensor_msgs::image_encodings::BGR8, blurred_image).toImageMsg());
+
 }
 
 
