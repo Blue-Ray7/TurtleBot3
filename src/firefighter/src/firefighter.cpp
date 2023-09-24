@@ -21,6 +21,7 @@ tf2_ros::Buffer tfBuffer;
 tf2_ros::TransformListener *tfListener;
 
 void detect_blue_squares(cv::Mat hsv_frame) {
+
     /* Detect blue squares based on color and shape then find their poses (position + orientation) 
        from camera and laser scanner data.
 
@@ -38,6 +39,38 @@ void detect_blue_squares(cv::Mat hsv_frame) {
        7) Transform blue square coordinates from camera frame to map frame using tf2
 
     */ 
+
+    // Create color mask
+    cv::Mat blueMask;
+    cv::Scalar blueLower(100, 50, 50); 
+    cv::Scalar blueUpper(130, 255, 255);
+    cv::inRange(hsv_frame, blueLower, blueUpper, blueMask);
+
+    // Find contours of blue squares
+    std::vector<std::vector<cv::Point>> blueContours;
+    cv::findContours(blueMask, blueContours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    // Extract blue square positions
+    for (const auto &contour : blueContours) {
+
+        double area = cv::contourArea(contour);
+        
+        // Filter out noisy detections 
+        if (area > 100) {
+
+            cv::Rect boundingRect = cv::boundingRect(contour);
+            geometry_msgs::Point markerPoint;
+
+            // Compute center of bounding rectangle
+            markerPoint.x = boundingRect.x + boundingRect.width/2;
+            markerPoint.y = boundingRect.y + boundingRect.height/2;;
+            markerPoint.z = 0.0;
+
+            ROS_INFO("markerPoint.x: %.2f", markerPoint.x);
+            ROS_INFO("markerPoint.y: %.2f", markerPoint.y);
+        }
+
+    }
 
 }
 
