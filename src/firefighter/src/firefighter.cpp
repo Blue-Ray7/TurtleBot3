@@ -85,9 +85,9 @@ void detect_blue_squares(cv::Mat hsv_frame) {
             int laserscan_index = static_cast<int> (final_camera_fov / laserScan.angle_increment);
             double laserscan_range = laserScan.ranges.at(laserscan_index);
             
-
             ROS_INFO("[BLUE] Final Angle: %.2f - Index: %i", final_camera_fov*180 / M_PI, laserscan_index);
         
+
             /* Transforming marker point from camera frame to map frame */ 
 
             // Set camera frame coordinates
@@ -103,11 +103,50 @@ void detect_blue_squares(cv::Mat hsv_frame) {
                 blueSquare.point.x = cos(final_camera_fov) * laserscan_range;
                 blueSquare.point.y = sin(final_camera_fov) * laserscan_range;
             }
+        
+            // Listen to transformation using tf2
+            geometry_msgs::TransformStamped transformation;
 
-            // Find transformation
+            try
+            {
+                transformation = tfBuffer.lookupTransform("map", "camera_link", ros::Time(0), ros::Duration(1.0));
+            }
+            catch (tf2::TransformException &ex)
+            {
+                ROS_WARN("%s", ex.what());
+                return;
+            }
+
+            // Compute rotation matrix
+            tf2::Quaternion r1(
+            transformation.transform.rotation.x,
+            transformation.transform.rotation.y,
+            transformation.transform.rotation.z,
+            transformation.transform.rotation.w
+            );
+
+            ROS_INFO("Twist around Z: %.2f",transformation.transform.rotation.z);
+            
+            // Compute translation vector
+            tf2::Vector3 t1(
+            transformation.transform.translation.x,
+            transformation.transform.translation.y,
+            transformation.transform.translation.z
+            );
+            
+            // Build transformation matrix and apply the transformation
+            tf2::Transform transform(r1, t1);
+            tf2::Vector3 point_in_child_coordinates(blueSquare.point.x, blueSquare.point.y, 0.0);
+            tf2::Vector3 point_in_parent_coordinates = transform * point_in_child_coordinates;
 
             // Compute transformed map frame coordinates
+            geometry_msgs::PointStamped blueSquareTransformed;
+            blueSquareTransformed.header.frame_id = "map";
+            blueSquareTransformed.header.stamp = ros::Time(0);
 
+            blueSquareTransformed.point.x = point_in_parent_coordinates.getX();
+            blueSquareTransformed.point.y = point_in_parent_coordinates.getY();
+            blueSquareTransformed.point.z = 0.0;  
              
         }
 
