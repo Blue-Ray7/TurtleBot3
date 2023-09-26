@@ -1,6 +1,6 @@
 
 <!-- PROJECT SHIELDS -->
-![LinkedIn]([https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white](https://www.linkedin.com/in/raouf-ayadi-a0a142223/))
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/raouf-ayadi-a0a142223/)
 
 
 <!-- ABOUT THE PROJECT -->
