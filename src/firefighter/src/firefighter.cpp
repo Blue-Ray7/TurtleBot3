@@ -87,6 +87,28 @@ void detect_blue_squares(cv::Mat hsv_frame) {
             
 
             ROS_INFO("[BLUE] Final Angle: %.2f - Index: %i", final_camera_fov*180 / M_PI, laserscan_index);
+        
+            /* Transforming marker point from camera frame to map frame */ 
+
+            // Set camera frame coordinates
+            geometry_msgs::PointStamped blueSquare;
+            blueSquare.header.frame_id = "camera_link";
+            blueSquare.header.stamp = ros::Time(0);
+
+            if (final_camera_fov > 0){
+                blueSquare.point.x = cos(final_camera_fov) * laserscan_range;
+                blueSquare.point.y = -sin(final_camera_fov) * laserscan_range;
+            }
+            else if (final_camera_fov < 0) {
+                blueSquare.point.x = cos(final_camera_fov) * laserscan_range;
+                blueSquare.point.y = sin(final_camera_fov) * laserscan_range;
+            }
+
+            // Find transformation
+
+            // Compute transformed map frame coordinates
+
+             
         }
 
     }
