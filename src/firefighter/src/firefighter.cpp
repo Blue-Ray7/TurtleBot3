@@ -23,6 +23,43 @@ tf2_ros::TransformListener *tfListener;
 
 sensor_msgs::LaserScan laserScan;
 
+
+void laserScanCallback(const sensor_msgs::LaserScanConstPtr &laser_msg) {
+    
+    laserScan = *laser_msg;
+
+}
+
+
+void publish_marker(ros::Publisher &marker_publisher, 
+                    const std::string &ns, const int id,
+                    geometry_msgs::PointStamped markerPoint,
+                    const std_msgs::ColorRGBA &color) {
+    
+    visualization_msgs::Marker marker;
+
+    marker.header = markerPoint.header;
+    marker.ns = ns;
+    marker.id = id;
+    marker.type = visualization_msgs::Marker::SPHERE;
+    marker.action = visualization_msgs::Marker::ADD;
+
+    marker.pose.position = markerPoint.point;
+
+    marker.scale.x = 0.1;
+    marker.scale.y = 0.1;
+    marker.scale.z = 0.1;
+
+    marker.color = color; 
+
+    marker.lifetime = ros::Duration(100);
+
+    // marker.text=;
+    marker_publisher.publish( marker );
+
+}
+
+
 void detect_blue_squares(cv::Mat hsv_frame) {
 
     /* Detect blue squares based on color and shape then find their poses (position + orientation) 
@@ -147,7 +184,15 @@ void detect_blue_squares(cv::Mat hsv_frame) {
             blueSquareTransformed.point.x = point_in_parent_coordinates.getX();
             blueSquareTransformed.point.y = point_in_parent_coordinates.getY();
             blueSquareTransformed.point.z = 0.0;  
-             
+            
+            // Publish results to blueSquare output topic
+            std_msgs::ColorRGBA blueColor;
+            blueColor.a = 1.0;
+            blueColor.b = 1.0;
+            blueColor.g = 0.0;
+            blueColor.r = 0.0;
+            publish_marker(blueSquarePublisher, "blue_markers", 1 , blueSquareTransformed, blueColor);
+
         }
 
     }
@@ -183,13 +228,6 @@ void cameraCallback(const sensor_msgs::ImageConstPtr &cam_msg) {
     {
         ROS_ERROR("cv_bridge exception: %s", e.what());
     }
-
-}
-
-
-void laserScanCallback(const sensor_msgs::LaserScanConstPtr &laser_msg) {
-    
-    laserScan = *laser_msg;
 
 }
 
