@@ -1,0 +1,8 @@
+<launch>
+  <include file="$(find hwp_turtlebot3_gazebo)/launch/hwp_rescue_simple.launch" />
+
+  <node pkg="firefighter" type="firefighter_node" name="firefighter" output="screen" />
+
+  <include file="$(find hwp_navigation)/launch/move_base.launch" />
+
+</launch>
